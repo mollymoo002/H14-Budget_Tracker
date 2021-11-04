@@ -4,15 +4,21 @@ const FILES_TO_CACHE = [
     "/assets/css/style.css",
     "/manifest.webmanifest",
     "/index.js",
-    "/assets/images/icons/icon-192x192.png",
-    "/assets/images/icons/icon-512x512.png",
+    "/assets/icons/icon-192x192.png",
+    "/assets/icons/icon-512x512.png",
   ];
   
   const CACHE_NAME = "static-cache-v2";
   const DATA_CACHE_NAME = "data-cache-v1";
   
   // install
-  self.addEventListener("install", function(evt) {
+  self.addEventListener("install", evt => {
+    evt.waitUntil(
+        caches.open(DATA_CACHE_NAME).then(cache => {
+            console.log("Transaction pre-cached successfully!");
+            return cache.add("/api/transaction")
+        })
+    );
     evt.waitUntil(
       caches.open(CACHE_NAME).then(cache => {
         console.log("Your files were pre-cached successfully!");
